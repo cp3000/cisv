@@ -1,0 +1,16 @@
+{
+  "name": "get-incident-details",
+  "version": "1.0.0",
+  "description": "Function returns details about an incident given the sysid of it",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tedious": "^2.0.0",
+    "unirest": "^0.5.1"
+  }
+}

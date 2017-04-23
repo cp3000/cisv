@@ -1,0 +1,14 @@
+{
+    "disabled": false,
+    "bindings": [{
+            "name": "req",
+            "type": "httpTrigger",
+            "direction": "in"
+        },
+        {
+            "type": "http",
+            "name": "res",
+            "direction": "out"
+        }
+    ]
+}

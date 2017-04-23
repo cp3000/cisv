@@ -1,0 +1,16 @@
+{
+    "version": "0.1.0",
+    "active": "CISV prod",
+    "configurations": [
+        {
+            "name": "CISV prod",
+            "environment": [
+                {
+                    "O365ADMIN": "",
+                    "O365ADMINPWD": "",
+                    "O365TENANT": ""
+                }
+            ]
+        }
+    ]
+}
