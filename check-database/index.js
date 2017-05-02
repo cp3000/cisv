@@ -52,7 +52,7 @@ module.exports = function (context, req) {
                     context.bindings.res =  "database answered: " + rowCount + ' row(s) returned'
                      context.res = {
                     // status: 200, /* Defaults to 200 */
-                    body: "database answered: " + rowCount + ' row(s) returned'
+                    body: "The database answered: " + rowCount + ' row(s) returned'
                 };
                 context.done();
                 }
