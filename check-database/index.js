@@ -37,7 +37,7 @@ module.exports = function (context, req) {
             // Read all rows from table
             request = new Request(
                 `
-        SELECT TOP (1000) [id]
+        SELECT TOP (2) [id]
       ,[timestamp]
       ,[userName]
       ,[email]
