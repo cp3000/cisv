@@ -1,14 +1,11 @@
-module.exports = function (context, req) {
+module.exports = function(context, req) {
     var Connection = require('tedious').Connection;
     var Request = require('tedious').Request;
 
-
     context.log('Processing request');
-    
-    if (req.body && req.body.name) {
+    context.log(JSON.stringify(req.body));
 
-        // >>>
-
+    if (req.body && req.body.sql) {
         // Create connection to database
         var config = {
             userName: 'cisv', // update me
@@ -22,47 +19,44 @@ module.exports = function (context, req) {
         var connection = new Connection(config);
 
         // Attempt to connect and execute queries if connection goes through
-        connection.on('connect', function (err) {
+        connection.on('connect', function(err) {
             if (err) {
-                context.log(err)
-            }
-            else {
+                context.log(err);
+                context.res = {
+                    status: 400,
+                    body: err
+                };
+                context.done();
+            } else {
                 queryDatabase()
             }
         });
 
         function queryDatabase() {
             context.log('Reading rows from the Table...');
-
+            sql = req.body.sql;
             // Read all rows from table
+            var results = [];
             request = new Request(
-                `
-        SELECT TOP (2) [id]
-      ,[timestamp]
-      ,[userName]
-      ,[email]
-      ,[password]
-      ,[country]
-      ,[image]
-      ,[birthday]
-  FROM [dbo].[User]
-        `,
-                function (err, rowCount, rows) {
+                sql,
+                function(err, rowCount, rows) {
+                    var result = JSON.stringify(results); //JSON.stringify(rows);
                     console.log(rowCount + ' row(s) returned');
-                    context.bindings.res =  "database answered: " + rowCount + ' row(s) returned'
-                     context.res = {
-                    // status: 200, /* Defaults to 200 */
-                    body: "The database answered: " + rowCount + ' row(s) returned'
-                };
-                context.done();
+                    context.bindings.res = result;
+                    context.res = {
+                        body: result
+                    };
+                    context.done();
                 }
             );
-
-            request.on('row', function (columns) {
-                columns.forEach(function (column) {
+            request.on('row', function(columns) {
+                var result = [];
+                columns.forEach(function(column) {
+                    result.push(column.value);
                     context.log("%s\t%s", column.metadata.colName, column.value);
                 });
-               
+                results.push(result);
+
             });
 
             connection.execSql(request);
@@ -72,8 +66,7 @@ module.exports = function (context, req) {
         ///>>>
 
 
-    }
-    else {
+    } else {
         context.res = {
             status: 400,
             body: "Please pass a name on the query string or in the request body"
@@ -83,7 +76,7 @@ module.exports = function (context, req) {
 
 };
 
-module.exports.testargs = function () {
+module.exports.testargs = function() {
     var json = require('./sample.json');
 
     return [
